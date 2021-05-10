@@ -18,20 +18,8 @@ public class Main {
     //directory del file Excel contenente la lista dei comuni italiani e i corrispettivi codici di riferimento
     private static final String EXCEL_FILE_LOCATION = "C:\\Users\\wadod\\IdeaProjects\\CalcoloCodFisc\\src\\main\\resources\\Comuni.xls";
 
-    //variabili che verranno riempite coi dati dell'utente
-    private static String cognome;
-    private static String nome;
-    private static String dataDiNascita;
-    private static int annoDiNascita;
-    private static int meseDiNascita;
-    private static int giornoDiNascita;
     private static char codiceMese;
-    private static String giorno;
-    private static String sesso;
-    private static String comune;
     private static int codiceDiControllo;
-
-    private static String codiceFiscale;
 
     //scanner per input dati
     static Scanner scanner = new Scanner(System.in);
@@ -40,7 +28,6 @@ public class Main {
     public static boolean checkAlfabeto(String nomeDaControllare) {
         for (int x = 0; x < nomeDaControllare.length(); x++) {
             if (nomeDaControllare.charAt(x) == ' ' || nomeDaControllare.charAt(x) == '\'') {
-                continue;
             } else if (!Character.isLetter(nomeDaControllare.charAt(x))) {
                 return true;
             }
@@ -53,6 +40,8 @@ public class Main {
 
 
         //loop che richiede inserimento cognome finché non ne viene inserito uno corretto (solo caratteri dell'alfabeto)
+        //variabili che verranno riempite coi dati dell'utente
+        String cognome;
         while (true) {
             try {
                 System.out.print("Inserire il cognome: ");
@@ -110,6 +99,7 @@ public class Main {
 
 
         //loop che richiede inserimento nome finché non ne viene inserito uno corretto (solo caratteri dell'alfabeto)
+        String nome;
         while (true) {
             try {
                 System.out.print("Inserire il nome: ");
@@ -163,6 +153,7 @@ public class Main {
         }
 
 
+        String sesso;
         while (true) {
                 System.out.print("Inserire il sesso (M o F): ");
                 sesso = scanner.nextLine();
@@ -174,16 +165,18 @@ public class Main {
                 }
                 else{
                     System.out.println("Inserire un sesso valido!");
-                    continue;
                 }
         }
 
+        int giornoDiNascita;
+        int annoDiNascita;
+        int meseDiNascita;
         while(true){
             System.out.print("Inserire la data di nascita nel formato gg/mm/aaaa: ");
-            dataDiNascita = scanner.nextLine();
+            String dataDiNascita = scanner.nextLine();
             DateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
             formatoData.setLenient(false);
-            Date data = null;
+            Date data;
             Calendar calendar;
 
 
@@ -222,32 +215,22 @@ giornoDiNascita = calendar.get(Calendar.DAY_OF_MONTH);
         }
 
 
-        switch (meseDiNascita){
-            case 1: codiceMese = 'A';
-            break;
-            case 2: codiceMese = 'B';
-            break;
-            case 3: codiceMese = 'C';
-            break;
-            case 4: codiceMese = 'D';
-            break;
-            case 5: codiceMese = 'E';
-            break;
-            case 6: codiceMese = 'H';
-            break;
-            case 7: codiceMese = 'L';
-            break;
-            case 8: codiceMese = 'M';
-            break;
-            case 9: codiceMese = 'P';
-            break;
-            case 10: codiceMese = 'R';
-            break;
-            case 11: codiceMese = 'S';
-            break;
-            case 12: codiceMese = 'T';
+        switch (meseDiNascita) {
+            case 1 -> codiceMese = 'A';
+            case 2 -> codiceMese = 'B';
+            case 3 -> codiceMese = 'C';
+            case 4 -> codiceMese = 'D';
+            case 5 -> codiceMese = 'E';
+            case 6 -> codiceMese = 'H';
+            case 7 -> codiceMese = 'L';
+            case 8 -> codiceMese = 'M';
+            case 9 -> codiceMese = 'P';
+            case 10 -> codiceMese = 'R';
+            case 11 -> codiceMese = 'S';
+            case 12 -> codiceMese = 'T';
         }
 
+        String comune;
         while(true) {
 
             System.out.print("Inserire il comune italiano di nascita: ");
@@ -282,9 +265,7 @@ giornoDiNascita = calendar.get(Calendar.DAY_OF_MONTH);
                 continue;
             }
 
-            catch (IOException e) {
-                e.printStackTrace();
-            } catch (BiffException e) {
+            catch (IOException | BiffException e) {
                 e.printStackTrace();
             } finally {
 
@@ -296,287 +277,109 @@ break;
         }
 
 
-
-                if(sesso.equalsIgnoreCase("m")) {
+        String giorno;
+        if(sesso.equalsIgnoreCase("m")) {
                     giorno = String.format("%02d", giornoDiNascita);
                 }else {
                     giorno = String.valueOf(giornoDiNascita)+40;
                 }
-                codiceFiscale = cognome + nome + annoDiNascita + codiceMese + giorno + comune;
+        String codiceFiscale = cognome + nome + annoDiNascita + codiceMese + giorno + comune;
 
                 for(int x = 0; x < codiceFiscale.length(); x += 2){
-                    switch (codiceFiscale.charAt(x)){
-                        case 'A', '0': codiceDiControllo += 1;
-                        break;
-
-                        case 'B', '1': codiceDiControllo += 0;
-                        break;
-
-                        case 'C', '2': codiceDiControllo += 5;
-                        break;
-
-                        case 'D', '3': codiceDiControllo += 7;
-                        break;
-
-                        case 'E', '4': codiceDiControllo += 9;
-                        break;
-
-                        case 'F', '5': codiceDiControllo += 13;
-                        break;
-
-                        case 'G', '6': codiceDiControllo += 15;
-                        break;
-
-                        case 'H', '7': codiceDiControllo += 17;
-                        break;
-
-                        case 'I', '8': codiceDiControllo += 19;
-                        break;
-
-                        case 'J', '9': codiceDiControllo += 21;
-                        break;
-
-                        case 'K': codiceDiControllo += 2;
-                        break;
-
-                        case 'L': codiceDiControllo += 4;
-                        break;
-
-                        case 'M': codiceDiControllo += 18;
-                        break;
-
-                        case 'N': codiceDiControllo += 20;
-                        break;
-
-                        case 'O': codiceDiControllo += 11;
-                        break;
-
-                        case 'P': codiceDiControllo += 3;
-                        break;
-
-                        case 'Q': codiceDiControllo += 6;
-                        break;
-
-                        case 'R': codiceDiControllo += 8;
-                        break;
-
-                        case 'S': codiceDiControllo += 12;
-                        break;
-
-                        case 'T': codiceDiControllo += 14;
-                        break;
-
-                        case 'U': codiceDiControllo += 16;
-                        break;
-
-                        case 'V': codiceDiControllo += 10;
-                        break;
-
-                        case 'W': codiceDiControllo += 22;
-                        break;
-
-                        case 'X': codiceDiControllo += 25;
-                        break;
-
-                        case 'Y': codiceDiControllo += 24;
-                        break;
-
-                        case 'Z': codiceDiControllo += 23;
-                        break;
+                    switch (codiceFiscale.charAt(x)) {
+                        case 'A', '0' -> codiceDiControllo += 1;
+                        case 'B', '1' -> {
+                        }
+                        case 'C', '2' -> codiceDiControllo += 5;
+                        case 'D', '3' -> codiceDiControllo += 7;
+                        case 'E', '4' -> codiceDiControllo += 9;
+                        case 'F', '5' -> codiceDiControllo += 13;
+                        case 'G', '6' -> codiceDiControllo += 15;
+                        case 'H', '7' -> codiceDiControllo += 17;
+                        case 'I', '8' -> codiceDiControllo += 19;
+                        case 'J', '9' -> codiceDiControllo += 21;
+                        case 'K' -> codiceDiControllo += 2;
+                        case 'L' -> codiceDiControllo += 4;
+                        case 'M' -> codiceDiControllo += 18;
+                        case 'N' -> codiceDiControllo += 20;
+                        case 'O' -> codiceDiControllo += 11;
+                        case 'P' -> codiceDiControllo += 3;
+                        case 'Q' -> codiceDiControllo += 6;
+                        case 'R' -> codiceDiControllo += 8;
+                        case 'S' -> codiceDiControllo += 12;
+                        case 'T' -> codiceDiControllo += 14;
+                        case 'U' -> codiceDiControllo += 16;
+                        case 'V' -> codiceDiControllo += 10;
+                        case 'W' -> codiceDiControllo += 22;
+                        case 'X' -> codiceDiControllo += 25;
+                        case 'Y' -> codiceDiControllo += 24;
+                        case 'Z' -> codiceDiControllo += 23;
                     }
                 }
 
                 for(int x = 1; x < codiceFiscale.length(); x += 2) {
 
                     switch (codiceFiscale.charAt(x)) {
-                        case 'A', '0':
-                            codiceDiControllo += 0;
-                            break;
-
-                        case 'B', '1':
-                            codiceDiControllo += 1;
-                            break;
-
-                        case 'C', '2':
-                            codiceDiControllo += 2;
-                            break;
-
-                        case 'D', '3':
-                            codiceDiControllo += 3;
-                            break;
-
-                        case 'E', '4':
-                            codiceDiControllo += 4;
-                            break;
-
-                        case 'F', '5':
-                            codiceDiControllo += 5;
-                            break;
-
-                        case 'G', '6':
-                            codiceDiControllo += 6;
-                            break;
-
-                        case 'H', '7':
-                            codiceDiControllo += 7;
-                            break;
-
-                        case 'I', '8':
-                            codiceDiControllo += 8;
-                            break;
-
-                        case 'J', '9':
-                            codiceDiControllo += 9;
-                            break;
-
-                        case 'K':
-                            codiceDiControllo += 10;
-                            break;
-
-                        case 'L':
-                            codiceDiControllo += 11;
-                            break;
-
-                        case 'M':
-                            codiceDiControllo += 12;
-                            break;
-
-                        case 'N':
-                            codiceDiControllo += 13;
-                            break;
-
-                        case 'O':
-                            codiceDiControllo += 14;
-                            break;
-
-                        case 'P':
-                            codiceDiControllo += 15;
-                            break;
-
-                        case 'Q':
-                            codiceDiControllo += 16;
-                            break;
-
-                        case 'R':
-                            codiceDiControllo += 17;
-                            break;
-
-                        case 'S':
-                            codiceDiControllo += 18;
-                            break;
-
-                        case 'T':
-                            codiceDiControllo += 19;
-                            break;
-
-                        case 'U':
-                            codiceDiControllo += 20;
-                            break;
-
-                        case 'V':
-                            codiceDiControllo += 21;
-                            break;
-
-                        case 'W':
-                            codiceDiControllo += 22;
-                            break;
-
-                        case 'X':
-                            codiceDiControllo += 23;
-                            break;
-
-                        case 'Y':
-                            codiceDiControllo += 24;
-                            break;
-
-                        case 'Z':
-                            codiceDiControllo += 25;
-                            break;
-
+                        case 'A', '0' -> {
+                        }
+                        case 'B', '1' -> codiceDiControllo += 1;
+                        case 'C', '2' -> codiceDiControllo += 2;
+                        case 'D', '3' -> codiceDiControllo += 3;
+                        case 'E', '4' -> codiceDiControllo += 4;
+                        case 'F', '5' -> codiceDiControllo += 5;
+                        case 'G', '6' -> codiceDiControllo += 6;
+                        case 'H', '7' -> codiceDiControllo += 7;
+                        case 'I', '8' -> codiceDiControllo += 8;
+                        case 'J', '9' -> codiceDiControllo += 9;
+                        case 'K' -> codiceDiControllo += 10;
+                        case 'L' -> codiceDiControllo += 11;
+                        case 'M' -> codiceDiControllo += 12;
+                        case 'N' -> codiceDiControllo += 13;
+                        case 'O' -> codiceDiControllo += 14;
+                        case 'P' -> codiceDiControllo += 15;
+                        case 'Q' -> codiceDiControllo += 16;
+                        case 'R' -> codiceDiControllo += 17;
+                        case 'S' -> codiceDiControllo += 18;
+                        case 'T' -> codiceDiControllo += 19;
+                        case 'U' -> codiceDiControllo += 20;
+                        case 'V' -> codiceDiControllo += 21;
+                        case 'W' -> codiceDiControllo += 22;
+                        case 'X' -> codiceDiControllo += 23;
+                        case 'Y' -> codiceDiControllo += 24;
+                        case 'Z' -> codiceDiControllo += 25;
                     }
                 }
 
                 codiceDiControllo = codiceDiControllo%26;
 
-                switch (codiceDiControllo){
-                    case 0: codiceFiscale = codiceFiscale.concat("A");
-                    break;
-
-                    case 1: codiceFiscale = codiceFiscale.concat("B");
-                    break;
-
-                    case 2: codiceFiscale = codiceFiscale.concat("C");
-                    break;
-
-                    case 3: codiceFiscale = codiceFiscale.concat("D");
-                    break;
-
-                    case 4: codiceFiscale = codiceFiscale.concat("E");
-                    break;
-
-                    case 5: codiceFiscale = codiceFiscale.concat("F");
-                    break;
-
-                    case 6: codiceFiscale = codiceFiscale.concat("G");
-                    break;
-
-                    case 7: codiceFiscale = codiceFiscale.concat("H");
-                    break;
-
-                    case 8: codiceFiscale = codiceFiscale.concat("I");
-                    break;
-
-                    case 9: codiceFiscale = codiceFiscale.concat("J");
-                    break;
-
-                    case 10: codiceFiscale = codiceFiscale.concat("K");
-                    break;
-
-                    case 11: codiceFiscale = codiceFiscale.concat("L");
-                    break;
-
-                    case 12: codiceFiscale = codiceFiscale.concat("M");
-                    break;
-
-                    case 13: codiceFiscale = codiceFiscale.concat("N");
-                    break;
-
-                    case 14: codiceFiscale = codiceFiscale.concat("O");
-                    break;
-
-                    case 15: codiceFiscale = codiceFiscale.concat("P");
-                    break;
-
-                    case 16: codiceFiscale = codiceFiscale.concat("Q");
-                    break;
-
-                    case 17: codiceFiscale = codiceFiscale.concat("R");
-                    break;
-
-                    case 18: codiceFiscale = codiceFiscale.concat("S");
-                    break;
-
-                    case 19: codiceFiscale = codiceFiscale.concat("T");
-                    break;
-
-                    case 20: codiceFiscale = codiceFiscale.concat("U");
-                    break;
-
-                    case 21: codiceFiscale = codiceFiscale.concat("V");
-                    break;
-
-                    case 22: codiceFiscale =  codiceFiscale.concat("W");
-                    break;
-
-                    case 23: codiceFiscale = codiceFiscale.concat("X");
-                    break;
-
-                    case 24: codiceFiscale = codiceFiscale.concat("Y");
-                    break;
-
-                    case 25: codiceFiscale = codiceFiscale.concat("Z");
-                    break;
-                }
+        switch (codiceDiControllo) {
+            case 0 -> codiceFiscale = codiceFiscale.concat("A");
+            case 1 -> codiceFiscale = codiceFiscale.concat("B");
+            case 2 -> codiceFiscale = codiceFiscale.concat("C");
+            case 3 -> codiceFiscale = codiceFiscale.concat("D");
+            case 4 -> codiceFiscale = codiceFiscale.concat("E");
+            case 5 -> codiceFiscale = codiceFiscale.concat("F");
+            case 6 -> codiceFiscale = codiceFiscale.concat("G");
+            case 7 -> codiceFiscale = codiceFiscale.concat("H");
+            case 8 -> codiceFiscale = codiceFiscale.concat("I");
+            case 9 -> codiceFiscale = codiceFiscale.concat("J");
+            case 10 -> codiceFiscale = codiceFiscale.concat("K");
+            case 11 -> codiceFiscale = codiceFiscale.concat("L");
+            case 12 -> codiceFiscale = codiceFiscale.concat("M");
+            case 13 -> codiceFiscale = codiceFiscale.concat("N");
+            case 14 -> codiceFiscale = codiceFiscale.concat("O");
+            case 15 -> codiceFiscale = codiceFiscale.concat("P");
+            case 16 -> codiceFiscale = codiceFiscale.concat("Q");
+            case 17 -> codiceFiscale = codiceFiscale.concat("R");
+            case 18 -> codiceFiscale = codiceFiscale.concat("S");
+            case 19 -> codiceFiscale = codiceFiscale.concat("T");
+            case 20 -> codiceFiscale = codiceFiscale.concat("U");
+            case 21 -> codiceFiscale = codiceFiscale.concat("V");
+            case 22 -> codiceFiscale = codiceFiscale.concat("W");
+            case 23 -> codiceFiscale = codiceFiscale.concat("X");
+            case 24 -> codiceFiscale = codiceFiscale.concat("Y");
+            case 25 -> codiceFiscale = codiceFiscale.concat("Z");
+        }
 
                 System.out.println("Codice Fiscale: " + codiceFiscale);
             }
