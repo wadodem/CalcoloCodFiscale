@@ -1,6 +1,6 @@
 /*
 
-Calcolatore di codice fiscale italiano
+Calcolo di codice fiscale italiano utilizzando file Excel della codifica comuni italiani
 
 11/05/2021
 
@@ -50,10 +50,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        /*
-         Loop che richiede inserimento cognome finché non ne viene inserito uno
-         corretto (solo caratteri dell'alfabeto)
-         */
+        //Inserimento cognome e verifiche.
 
         String cognome;
         while (true) {
@@ -68,12 +65,13 @@ public class Main {
                     continue;
                 }
 
-                //Modifica il cognome rendendolo maiuscolo.
-                cognome = cognome.toUpperCase();
+               
+               
 
                 /*Rimozione di eventuali spazi, apostrofi e accenti per cognomi come "De Luca", "D'Annunzio",
-                 "Polà".
+                 "Polà", ecc. 
                  */
+                cognome = cognome.toUpperCase();
                 cognome = cognome.replaceAll("\\s", "");
                 cognome = cognome.replaceAll("'", "");
                 cognome = Normalizer.normalize(cognome, Normalizer.Form.NFD);
@@ -118,7 +116,7 @@ public class Main {
         }
 
 
-        //Loop che richiede inserimento nome; come sopra per il cognome.
+        //Inserimento nome e verifiche; come sopra per il cognome.
         String nome;
         while (true) {
             try {
@@ -188,7 +186,7 @@ public class Main {
             }
         }
 
-        //Solo il formato gg/mm/aaaa è richiesto e accettato nell'inserimento data di nascita
+        //Inserimento data di nascsita. Solo il formato gg/mm/aaaa è richiesto e accettato.
         int giornoDiNascita;
         int annoDiNascita;
         int meseDiNascita;
@@ -230,7 +228,7 @@ public class Main {
 
         }
 
-        /*In base al mese di nascita viene assegnato un codice di una lettera
+        /*In relazione al mese di nascita viene assegnato un codice di una lettera
           che andrà a far parte del codice fiscale.
          */
         switch (meseDiNascita) {
@@ -266,7 +264,7 @@ public class Main {
             /*
              Viene utilizzata JExcelAPI per leggere il file .xls esterno contente
              l'elenco dei comuni ed i relativi codici di riferimento.
-             */
+             */ 
             Workbook workbook = null;
             try {
 
@@ -303,7 +301,7 @@ public class Main {
 
         String codiceFiscale = cognome + nome + annoDiNascita + codiceMese + giorno + comune;
 
-        //Calcolo dell'ultimo carattere del codice fiscale.
+        //Calcolo dell'ultimo carattere del codice fiscale, cioè il carattere di controllo.
         for (int x = 0; x < codiceFiscale.length(); x += 2) {
             switch (codiceFiscale.charAt(x)) {
                 case 'A', '0' -> codiceDiControllo += 1;
@@ -399,7 +397,8 @@ public class Main {
             case 24 -> codiceFiscale = codiceFiscale.concat("Y");
             case 25 -> codiceFiscale = codiceFiscale.concat("Z");
         }
-
+        
+        //Stampa output del codice fiscale.
         System.out.println("Codice Fiscale: " + codiceFiscale);
     }
 }
