@@ -183,6 +183,7 @@ public class Main {
                 break;
             } else {
                 System.out.println("Inserire un sesso valido!");
+                scanner.reset();
             }
         }
 
@@ -256,6 +257,7 @@ public class Main {
 
             if (comune.isEmpty() || checkAlfabeto(comune)) {
                 System.out.println("Inserisci un comune valido!");
+                scanner.reset();
                 continue;
             } else {
                 comune = WordUtils.capitalize(comune);
